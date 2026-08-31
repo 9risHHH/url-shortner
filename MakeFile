@@ -1,0 +1,58 @@
+.PHONY: build run clean test docker-build docker-run
+
+# Переменные
+BINARY_NAME=url-shortner
+PORT=8080
+
+# Сборка
+build:
+	go build -o bin/$(BINARY_NAME) cmd/app/main.go
+
+# Запуск
+run:
+	go run cmd/app/main.go
+
+# Запуск с указанием порта
+run-port:
+	PORT=$(PORT) go run cmd/app/main.go
+
+# Тесты
+test:
+	go test -v ./...
+
+# Тесты с проверкой конкурентности
+test-race:
+	go test -v -race ./...
+
+# Очистка
+clean:
+	rm -rf bin/
+
+
+docker-build:
+	docker build -t $(BINARY_NAME) .
+
+
+docker-run:
+	docker run -p $(PORT):$(PORT) -e PORT=$(PORT) $(BINARY_NAME)
+
+
+docker-compose-up:
+	docker-compose up -d
+
+
+docker-compose-down:
+	docker-compose down
+
+# Все команды
+help:
+	@echo "Доступные команды:"
+	@echo "  make build              - Собрать бинарник"
+	@echo "  make run                - Запустить приложение"
+	@echo "  make run-port PORT=8081 - Запустить на другом порту"
+	@echo "  make test               - Запустить тесты"
+	@echo "  make clean              - Очистить bin/"
+	@echo "  make docker-build       - Собрать Docker образ"
+	@echo "  make docker-run         - Запустить в Docker"
+	@echo "  make docker-compose-up  - Запустить через docker-compose"
+	@echo "  make docker-compose-down - Остановить docker-compose"
