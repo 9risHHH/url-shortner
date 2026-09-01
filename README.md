@@ -23,7 +23,7 @@ This project is an HTTP service that allows you to shorten long URLs. It uses on
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/url-shortner.git
+git clone https://github.com/9risHHH/url-shortner.git
 cd url-shortner
 
 # Run the application
@@ -113,7 +113,7 @@ HTTP-сервис, который позволяет сокращать длин
 Установка и запуск
 
 # Клонирование репозитория
-git clone https://github.com/YOUR_USERNAME/url-shortner.git
+git clone https://github.com/9risHHH/url-shortner.git
 cd url-shortner
 
 # Запуск приложения
