@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 	"sync"
-
-	"github.com/google/uuid"
 )
 
 // Storage определяет интерфейс для работы с хранилищем URL
@@ -22,7 +20,28 @@ type InMemoryStorage struct {
 
 // Save сохраняет URL в памяти с генерацией уникального ID
 func (s *InMemoryStorage) Save(ctx context.Context, originalURL string) (string, error) {
-	id := uuid.New().String() // Генерируем уникальный идентификатор
+	var id string
+	var err error
+
+	for i := 0; i < 3; i++ {
+		id, err = GenerateShortID()
+		if err != nil {
+			return "", fmt.Errorf("failed to generate unique ID: %w", err)
+		}
+
+		s.mu.RLock()
+		_, exists := s.data[id]
+		s.mu.RUnlock()
+
+		if !exists {
+			break
+		}
+
+		if i == 2 {
+			return "", fmt.Errorf("failed to generate unique ID after 3 attempts")
+		}
+	}
+	
 
 	// Блокируем доступ к map для записи
 	s.mu.Lock()
