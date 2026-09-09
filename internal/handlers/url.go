@@ -4,6 +4,7 @@ import (
 	"url-shortner/internal/service"
 	"encoding/json"
 	"net/http"
+	"url-shortner/internal/handlers/templates"
 )
 
 type URLHandler struct {
@@ -20,6 +21,15 @@ type ShortenResponse struct {
 
 func NewURLHandler(service *service.Service) *URLHandler {
 	return &URLHandler{service: service}
+}
+
+func (h *URLHandler) IndexHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Conten-Type", "text/html; charset=utf-8")
+	w.Write([]byte(templates.IndexHTML))
 }
 
 func (h *URLHandler) ShortenHandler(w http.ResponseWriter, r *http.Request) {
@@ -65,5 +75,6 @@ func (h *URLHandler) RedirectHandler(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, originalURL, http.StatusFound)
 }
+
 
 

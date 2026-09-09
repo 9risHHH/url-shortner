@@ -34,6 +34,8 @@ func main() {
 	mux.HandleFunc("POST /shorten", urlHandler.ShortenHandler)
 	mux.HandleFunc("GET /{id}", urlHandler.RedirectHandler)
 
+	mux.HandleFunc("GET /", urlHandler.IndexHandler)
+
 	handlerWithLogging := middleware.LoggerMiddleware(mux)
 
 	// Создание и запуск HTTP-сервера
